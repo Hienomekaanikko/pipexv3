@@ -28,7 +28,6 @@ void	close_fds(t_data *data)
 			ft_sys_error(data, "close");
 }
 
-
 void	clear_memory(t_data *data)
 {
 	if (data->paths)
