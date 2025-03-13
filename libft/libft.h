@@ -57,6 +57,8 @@ long long	ft_atol(const char *s);
 int			ft_isspace(int c);
 char		*ft_strndup(const char *s, size_t n);
 void		ft_free_substrings(char **arr_str);
+char		*ft_strjoin_free(char *s1, char *s2);
+int			is_space(char *cmd);
 
 
 #endif

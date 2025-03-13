@@ -12,95 +12,84 @@
 
 #include "pipex.h"
 
-static void	in_quote(const char *str, t_parse *data)
-{
-	if (!data->in_quote)
-	{
-		data->in_quote = 1;
-		data->quote_char = *str;
-	}
-	else if (*str == data->quote_char)
-	{
-		data->in_quote = 0;
-		data->quote_char = '\0';
-	}
-}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_cmd.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 09:50:50 by msuokas           #+#    #+#             */
+/*   Updated: 2025/03/12 15:31:00 by msuokas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	count_arguments(t_parse *data, const char *str)
-{
-	init_parse_data(data);
-	while (*str)
-	{
-		if (ft_isspace(*str) && !data->in_quote)
-			str++;
-		else
-		{
-			data->count++;
-			while (*str && (!ft_isspace(*str) || data->in_quote))
-			{
-				if (*str == '\'' || *str == '"')
-					in_quote(str, data);
-				str++;
-			}
-		}
-	}
-	return (data->count);
-}
+#include "pipex.h"
 
 static char	*extract_argument(t_parse *data, const char **str)
 {
 	int		i;
+	char	*buffer;
 
 	i = 0;
 	init_parse_data(data);
-	data->buffer = malloc((ft_strlen(*str) + 1) * sizeof(char));
+	buffer = malloc((ft_strlen(*str) + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
 	while (**str && (data->in_quote || !ft_isspace(**str)))
 	{
-		if (**str == '\\' && data->quote_char != '\'')
-		{
-			(*str)++;
-			if (**str)
-				data->buffer[i++] = **str;
-		}
-		else if ((**str == '\'' || **str == '"')
-			&& (!data->in_quote || **str == data->quote_char))
-			in_quote(*str, data);
-		else
-			data->buffer[i++] = **str;
+		handle_backslash(str, buffer, &i, data);
+		handle_quotes(str, data);
+		if (**str != '\\' && (**str != '\'' && **str != '"'))
+			buffer[i++] = **str;
 		(*str)++;
 	}
-	data->buffer[i] = '\0';
+	buffer[i] = '\0';
 	while (**str && ft_isspace(**str))
 		(*str)++;
-	return (data->buffer);
+	return (buffer);
+}
+
+static int	fill_result(char **result, t_parse *data, const char **str)
+{
+	int	i;
+
+	i = 0;
+	while (**str)
+	{
+		result[i] = extract_argument(data, str);
+		if (result[i] == NULL)
+		{
+			ft_free_split(result);
+			return (0);
+		}
+		i++;
+	}
+	result[i] = NULL;
+	return (1);
+}
+
+static char	**allocate_and_fill_result(t_parse *data, const char *str, int arg_count)
+{
+	char	**result;
+
+	result = malloc((arg_count + 1) * sizeof(char *));
+	if (!result)
+		return (NULL);
+	if (!fill_result(result, data, &str))
+		return (NULL);
+	return (result);
 }
 
 char	**parse_cmd(const char *str)
 {
 	t_parse	data;
-	char	**result;
 	int		arg_count;
-	int		i;
 
 	if (!str)
 		return (NULL);
 	while (*str && ft_isspace(*str))
 		str++;
 	arg_count = count_arguments(&data, str);
-	result = malloc((arg_count + 1) * sizeof(char *));
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (*str)
-	{
-		result[i] = extract_argument(&data, &str);
-		if (result[i] == NULL)
-		{
-			ft_free_split(result);
-			return (NULL);
-		}
-		i++;
-	}
-	result[i] = NULL;
-	return (result);
+	return (allocate_and_fill_result(&data, str, arg_count));
 }

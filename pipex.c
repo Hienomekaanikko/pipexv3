@@ -53,7 +53,6 @@ static void get_arguments(t_data *data, char **argv, char **envp)
 	if (data->cmd1)
 		data->path1 = get_command_path(data, data->cmd1, envp);
 	data->curr = 2;
-	data->error_code = 0;
 	data->cmd2 = get_command(data, argv[3]);
 	if (data->cmd2)
 		data->path2 = get_command_path(data, data->cmd2, envp);
@@ -75,22 +74,13 @@ int main(int argc, char **argv, char **envp)
 	}
 	prep_env(&data, argc, argv);
 	get_arguments(&data, argv, envp);
-	data.pid1 = fork();
-	if (data.pid1 == 0)
-		child_one(&data, data.path1, data.cmd1, envp);
-	else if (data.pid1 == -1)
-		ft_sys_error(&data, "FORK");
-	data.pid2 = fork();
-	if (data.pid2 == 0)
-		child_two(&data, data.path2, data.cmd2, envp);
-	else if (data.pid2 == -1)
-		ft_sys_error(&data, "FORK");
-	close_fds(&data);
+	fork_children(&data, envp);
 	if (data.in_error == 0)
 		status = processor(&data, data.pid1);
 	if (data.out_error == 0)
 		status = processor(&data, data.pid2);
+	clear_memory(&data);
 	if (status == 1)
-		return (data.error_code);
+		return (0);
 	return (data.out_error);
 }

@@ -15,14 +15,19 @@
 void	close_fds(t_data *data)
 {
 	if (data->in != -1)
-		close(data->in);
+		if (close(data->in) == -1)
+			ft_sys_error(data, "close");
 	if (data->out != -1)
-		close(data->out);
+		if (close(data->out) == -1)
+			ft_sys_error(data, "close");
 	if (data->pipe[0] != -1)
-		close(data->pipe[0]);
+		if (close(data->pipe[0]) == -1)
+			ft_sys_error(data, "close");
 	if (data->pipe[1] != -1)
-		close(data->pipe[1]);
+		if (close(data->pipe[1]) == -1)
+			ft_sys_error(data, "close");
 }
+
 
 void	clear_memory(t_data *data)
 {
@@ -55,6 +60,7 @@ void	ft_error_msg(t_data *data, char *arg, char *msg, int code)
 
 void	ft_sys_error(t_data *data, char *msg)
 {
+	close_fds(data);
 	clear_memory(data);
 	if (errno && msg)
 		perror(msg);

@@ -12,42 +12,27 @@
 
 #include "pipex.h"
 
-char	*is_absolute_path(t_data *data, char *cmd)
+char *test_cmd_paths(t_data *data, char *cmd)
 {
-	if (cmd[0] == '/' || cmd[0] == '.')
-	{
-		if (access(cmd, F_OK) != 0)
-		{
-			ft_error_msg(data, cmd, "No such file or directory", 127);
-			if (data->curr == 1)
-				data->in_error = 1;
-			if (data->curr == 2)
-				data->out_error = 127;
-		}
-		return (cmd);
-	}
-	return (NULL);
-}
-
-char *get_cmd_path(t_data *data, char *cmd)
-{
-	char *path;
-	char *final_path;
-	int i;
+	char	*final_path;
+	int		i;
 
 	i = 0;
+	final_path = NULL;
 	while (data->paths[i])
 	{
-		path = ft_strjoin(data->paths[i], "/");
-		if (!path)
+		final_path = ft_strjoin(data->paths[i], "/");
+		if (!final_path)
 			ft_sys_error(data, "Memory allocation failed");
-		final_path = ft_strjoin(path, cmd);
-		free(path);
-		path = NULL;
+		final_path = ft_strjoin_free(final_path, cmd);
 		if (!final_path)
 			ft_sys_error(data, "Memory allocation failed");
 		if (cmd_found(data, final_path))
-			return final_path;
+		{
+			ft_free_split(data->paths);
+			data->paths = NULL;
+			return (final_path);
+		}
 		free(final_path);
 		final_path = NULL;
 		i++;
@@ -55,11 +40,12 @@ char *get_cmd_path(t_data *data, char *cmd)
 	return (NULL);
 }
 
-
 static int	get_directories(t_data *data, char **envp)
 {
 	int	i;
 
+	if (data->paths != NULL)
+		return (1);
 	i = 0;
 	if (!envp[0])
 	{
@@ -98,7 +84,8 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 {
 	char *final_path;
 
-	final_path = is_relative_path(cmd[0]);
+	final_path = NULL;
+	final_path = is_relative_path(data, cmd[0]);
 	if (!final_path)
 	{
 		final_path = is_absolute_path(data, cmd[0]);
@@ -108,16 +95,13 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 		if (!final_path)
 		{
 			if (get_directories(data, envp))
-				final_path = get_cmd_path(data, cmd[0]);
+				final_path = test_cmd_paths(data, cmd[0]);
 			else
 				return (NULL);
 		}
 	}
-	if (final_path && !data->error_code)
-	{
-		if (!file_access(data, final_path))
-			return (final_path);
-	}
+	if (file_access(data, final_path))
+		return (final_path);
 	else
 		ft_error_msg(data, *cmd, "Command not found", 127);
 	return (final_path);

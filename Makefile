@@ -5,26 +5,19 @@ LIBS	= ${LIBFT}/libft.a
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 
-SRC = pipex.c \
-		children.c \
-		cleanup.c \
-		get_path.c \
-		parse_cmd.c \
-		init.c \
-		access_checks.c
-
+SRC = pipex.c children.c cleanup.c get_path.c parse_cmd.c init.c access_checks.c parse_utils.c
 OBJS = $(SRC:.c=.o)
 
-all: libft $(NAME)
+all: $(NAME)
 
-libft:
+$(LIBS):
 	$(MAKE) -C $(LIBFT)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $<
+%.o: %.c includes/pipex.h
+	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
 
 $(NAME): $(OBJS) $(LIBS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
 clean:
 	rm -f $(OBJS)
@@ -34,6 +27,6 @@ fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT) fclean
 
-re:	fclean all
+re: fclean all
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re

@@ -30,9 +30,7 @@ void	init_data(t_data *data)
 	data->out = -1;
 	data->pipe[0] = -1;
 	data->pipe[1] = -1;
-	data->error_code = 0;
 	data->out_error = 0;
 	data->in_error = 0;
 	data->curr = 1;
-	data->processes = 0;
 }

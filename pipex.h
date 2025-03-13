@@ -34,11 +34,9 @@ typedef struct s_data
 	int		pipe[2];
 	int		in;
 	int		out;
-	int		error_code;
 	int		out_error;
 	int		in_error;
 	int		curr;
-	int		processes;
 }	t_data;
 
 typedef struct s_parse
@@ -49,22 +47,30 @@ typedef struct s_parse
 	char		*buffer;
 }	t_parse;
 
-void	child_one(t_data *data, char *path, char **cmd, char **envp);
-void	child_two(t_data *data, char *path, char **cmd, char **envp);
-void	close_fds(t_data *data);
-char	*get_cmd_path(t_data *data, char *cmd);
-char	**parse_cmd(const char *str);
 void	init_parse_data(t_parse *data);
 void	init_data(t_data *data);
-char	*is_relative_path(char *cmd);
+
+char	**get_command(t_data *data, char *cmd);
+char	**parse_cmd(const char *str);
+char	*get_command_path(t_data *data, char **cmd, char **envp);
+char	*is_relative_path(t_data *data, char *cmd);
+char	*is_absolute_path(t_data *data, char *cmd);
+char	*test_cmd_paths(t_data *data, char *cmd);
 int		cmd_found(t_data *data, char *path);
+int		file_access(t_data *data, char *final_path);
+
+void	child_one(t_data *data, char *path, char **cmd, char **envp);
+void	child_two(t_data *data, char *path, char **cmd, char **envp);
+void	fork_children(t_data *data, char **envp);
+
+void	in_quote(const char *str, t_parse *data);
+int		count_arguments(t_parse *data, const char *str);
+void	handle_backslash(const char **str, char *buffer, int *i, t_parse *data);
+void	handle_quotes(const char **str, t_parse *data);
+
+void	close_fds(t_data *data);
 void	ft_error_msg(t_data *data, char *arg, char *msg, int code);
 void	clear_memory(t_data *data);
 void	ft_sys_error(t_data *data, char *msg);
-char	*get_command_path(t_data *data, char **cmd, char **envp);
-int		is_space(char *cmd);
-char	*is_absolute_path(t_data *data, char *cmd);
-int		file_access(t_data *data, char *final_path);
-char	**get_command(t_data *data, char *cmd);
 
 #endif
