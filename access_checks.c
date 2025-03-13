@@ -17,7 +17,7 @@ char *is_absolute_path(t_data *data, char *cmd)
 	char	*result;
 
 	result = NULL;
-	if (cmd[0] == '/' || cmd[0] == '.')
+	if (cmd[0] == '.' || cmd[0] == '/')
 	{
 		if (access(cmd, F_OK) != 0)
 		{
@@ -48,20 +48,24 @@ int	cmd_found(t_data *data, char *path)
 	return (0);
 }
 
-char	*is_relative_path(t_data *data, char *cmd)
+char *is_relative_path(t_data *data, char *cmd)
 {
 	char *result;
 
 	result = NULL;
-	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+	if (ft_strchr(cmd, '/') && cmd[0] != '/')
 	{
-		result = ft_strdup(cmd);
-		if (!result)
-			ft_sys_error(data, "Memory allocation failed");
-		return (result);
+		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+		{
+			result = ft_strdup(cmd);
+			if (!result)
+				ft_sys_error(data, "Memory allocation failed");
+			return (result);
+		}
 	}
 	return (NULL);
 }
+
 
 int	file_access(t_data *data, char *final_path)
 {
