@@ -27,14 +27,6 @@ int	is_space(char *cmd)
 	return (1);
 }
 
-void	check_exitcode(t_data *data)
-{
-	if (data->out_error == 1)
-		exit(1);
-	else
-		exit(data->error_code);
-}
-
 void	child_one(t_data *data, char *path, char **cmd, char **envp)
 {
 	dup2(data->in, 0);

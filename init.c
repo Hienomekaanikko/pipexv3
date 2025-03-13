@@ -34,6 +34,5 @@ void	init_data(t_data *data)
 	data->out_error = 0;
 	data->in_error = 0;
 	data->curr = 1;
-	data->path_available = 1;
 	data->processes = 0;
 }

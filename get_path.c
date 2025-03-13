@@ -17,7 +17,13 @@ char	*is_absolute_path(t_data *data, char *cmd)
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
 		if (access(cmd, F_OK) != 0)
+		{
 			ft_error_msg(data, cmd, "No such file or directory", 127);
+			if (data->curr == 1)
+				data->in_error = 1;
+			if (data->curr == 2)
+				data->out_error = 127;
+		}
 		return (cmd);
 	}
 	return (NULL);
@@ -44,8 +50,6 @@ char *get_cmd_path(t_data *data, char *cmd)
 			return final_path;
 		free(final_path);
 		final_path = NULL;
-		if (data->error_code == 1)
-			return (NULL);
 		i++;
 	}
 	return (NULL);
@@ -60,7 +64,6 @@ static int	get_directories(t_data *data, char **envp)
 	if (!envp[0])
 	{
 		ft_error_msg(data, NULL, "Path not found", 127);
-		data->path_available = 1;
 		return (0);
 	}
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
@@ -68,7 +71,6 @@ static int	get_directories(t_data *data, char **envp)
 	if (!envp[i])
 	{
 		ft_error_msg(data, NULL, "Path not found", 127);
-		data->path_available = 1;
 		return (0);
 	}
 	data->paths = ft_split(envp[i] + 5, ':');
@@ -83,7 +85,7 @@ char	**get_command(t_data *data, char *cmd)
 
 	if (!cmd || (ft_strlen(cmd) == 0) || is_space(cmd))
 	{
-		ft_error_msg(data, NULL, "Command not found", 127);
+		ft_error_msg(data, NULL, "Command not found: ", 127);
 		return (NULL);
 	}
 	temp = parse_cmd(cmd);
@@ -100,6 +102,9 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 	if (!final_path)
 	{
 		final_path = is_absolute_path(data, cmd[0]);
+		if ((data->curr == 1 && data->in_error == 1)
+			|| (data->curr == 2 && data->out_error == 127))
+			return (NULL);
 		if (!final_path)
 		{
 			if (get_directories(data, envp))
@@ -114,6 +119,6 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 			return (final_path);
 	}
 	else
-		ft_error_msg(data, NULL, "Command not found", 127);
+		ft_error_msg(data, *cmd, "Command not found", 127);
 	return (final_path);
 }

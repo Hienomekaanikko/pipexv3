@@ -40,7 +40,7 @@ static int	processor(t_data *data, pid_t pid)
 	int	status;
 
 	if (waitpid(pid, &status, 0) == -1)
-		ft_sys_error(data, "WAITPID");
+		ft_sys_error(data, NULL);
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
 		return (1);
 	else
@@ -91,6 +91,6 @@ int main(int argc, char **argv, char **envp)
 	if (data.out_error == 0)
 		status = processor(&data, data.pid2);
 	if (status == 1)
-		data.out_error = 126;
+		return (data.error_code);
 	return (data.out_error);
 }

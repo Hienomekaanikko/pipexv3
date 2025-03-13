@@ -40,14 +40,17 @@ void	clear_memory(t_data *data)
 
 void	ft_error_msg(t_data *data, char *arg, char *msg, int code)
 {
-	if (!data->error_code)
-		data->error_code = code;
+	if (data->curr == 1 && !data->in_error)
+		data->in_error = code;
+	if (data->curr == 2 && !data->out_error)
+		data->out_error = code;
+	ft_putstr_fd(msg, 2);
 	if (arg)
 	{
-		ft_putstr_fd(arg, 2);
 		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(arg, 2);
 	}
-	ft_putendl_fd(msg, 2);
+	ft_putstr_fd("\n", 2);
 }
 
 void	ft_sys_error(t_data *data, char *msg)

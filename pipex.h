@@ -38,7 +38,6 @@ typedef struct s_data
 	int		out_error;
 	int		in_error;
 	int		curr;
-	int		path_available;
 	int		processes;
 }	t_data;
 

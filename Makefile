@@ -34,6 +34,6 @@ fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT) fclean
 
-re: fclean all
+re:	fclean all
 
 .PHONY: all clean fclean re libft
