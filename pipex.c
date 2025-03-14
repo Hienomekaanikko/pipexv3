@@ -32,7 +32,10 @@ static void	prep_env(t_data *data, int argc, char **argv)
 		data->out_error = 1;
 	}
 	else if (data->out == -1 && access(argv[4], F_OK))
+	{
 		ft_error_msg(data, argv[argc - 1], "No such file or directory", 127);
+		data->out_error = 1;
+	}
 }
 
 static int	processor(t_data *data, pid_t pid2)
@@ -60,13 +63,19 @@ static int	processor(t_data *data, pid_t pid2)
 
 static void get_arguments(t_data *data, char **argv, char **envp)
 {
-	data->cmd1 = get_command(data, argv[2]);
-	if (data->cmd1)
-		data->path1 = get_command_path(data, data->cmd1, envp);
-	data->curr = 2;
-	data->cmd2 = get_command(data, argv[3]);
-	if (data->cmd2)
-		data->path2 = get_command_path(data, data->cmd2, envp);
+	if (data->in_error == 0)
+	{
+		data->cmd1 = get_command(data, argv[2]);
+		if (data->cmd1)
+			data->path1 = get_command_path(data, data->cmd1, envp);
+	}
+	if (data->out_error == 0)
+	{
+		data->curr = 2;
+		data->cmd2 = get_command(data, argv[3]);
+		if (data->cmd2)
+			data->path2 = get_command_path(data, data->cmd2, envp);
+	}
 	if (pipe(data->pipe) < 0)
 		ft_sys_error(data, "PIPE");
 }

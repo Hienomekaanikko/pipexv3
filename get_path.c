@@ -27,7 +27,7 @@ char *test_cmd_paths(t_data *data, char *cmd)
 		final_path = ft_strjoin_free(final_path, cmd);
 		if (!final_path)
 			ft_sys_error(data, "Memory allocation failed");
-		if (cmd_found(data, final_path))
+		if (file_access(data, final_path))
 		{
 			ft_free_split(data->paths);
 			data->paths = NULL;
@@ -37,6 +37,7 @@ char *test_cmd_paths(t_data *data, char *cmd)
 		final_path = NULL;
 		i++;
 	}
+	cmd_not_found_msg(data);
 	return (NULL);
 }
 
@@ -49,14 +50,14 @@ static int	get_directories(t_data *data, char **envp)
 	i = 0;
 	if (!envp[0])
 	{
-		ft_error_msg(data, NULL, "Path not found", 127);
+		unset_path_msg(data);
 		return (0);
 	}
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
 	{
-		ft_error_msg(data, NULL, "Path not found", 127);
+		unset_path_msg(data);
 		return (0);
 	}
 	data->paths = ft_split(envp[i] + 5, ':');
@@ -71,7 +72,7 @@ char	**get_command(t_data *data, char *cmd)
 
 	if (!cmd || (ft_strlen(cmd) == 0) || is_space(cmd))
 	{
-		ft_error_msg(data, NULL, "Command not found: ", 127);
+		ft_error_msg(data, NULL, "command not found", 127);
 		return (NULL);
 	}
 	temp = parse_cmd(cmd);
@@ -86,6 +87,9 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 
 	final_path = NULL;
 	final_path = is_relative_path(data, cmd[0]);
+	if ((data->curr == 1 && data->in_error == 126)
+		|| (data->curr == 2 && data->out_error == 126))
+		return (NULL);
 	if (!final_path)
 	{
 		final_path = is_absolute_path(data, cmd[0]);
@@ -95,7 +99,10 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 		if (!final_path)
 		{
 			if (get_directories(data, envp))
+			{
 				final_path = test_cmd_paths(data, cmd[0]);
+				return (final_path);
+			}
 			else
 				return (NULL);
 		}
@@ -103,6 +110,6 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 	if (file_access(data, final_path))
 		return (final_path);
 	else
-		ft_error_msg(data, *cmd, "Command not found", 127);
+		ft_error_msg(data, *cmd, "command not found", 127);
 	return (final_path);
 }

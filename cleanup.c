@@ -50,9 +50,10 @@ void	ft_error_msg(t_data *data, char *arg, char *msg, int code)
 		data->out_error = code;
 	if (arg)
 	{
+		ft_putstr_fd(" ", 2);
 		ft_putstr_fd(arg, 2);
-		ft_putstr_fd(": ", 2);
 	}
+	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(msg, 2);
 	ft_putstr_fd("\n", 2);
 }

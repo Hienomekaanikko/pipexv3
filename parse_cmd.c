@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-static char	*extract_argument(t_parse *data, const char **str)
+static char *extract_argument(t_parse *data, const char **str)
 {
 	int		i;
 	char	*buffer;
@@ -24,11 +24,12 @@ static char	*extract_argument(t_parse *data, const char **str)
 		return (NULL);
 	while (**str && (data->in_quote || !ft_isspace(**str)))
 	{
-		handle_backslash(str, buffer, &i, data);
-		handle_quotes(str, data);
-		if (**str != '\\' && (**str != '\'' && **str != '"'))
-			buffer[i++] = **str;
-		(*str)++;
+		if (**str == '"' || **str == '\'')
+			handle_quotes(str, buffer, &i);
+		else if (**str == '\\')
+			handle_backslash(str, buffer, &i);
+		else
+			buffer[i++] = *(*str)++;
 	}
 	buffer[i] = '\0';
 	while (**str && ft_isspace(**str))
@@ -72,6 +73,8 @@ char	**parse_cmd(const char *str)
 	t_parse	data;
 	int		arg_count;
 
+	if (!str)
+		return (NULL);
 	while (*str && ft_isspace(*str))
 		str++;
 	arg_count = count_arguments(&data, str);

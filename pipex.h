@@ -56,8 +56,8 @@ char	*get_command_path(t_data *data, char **cmd, char **envp);
 char	*is_relative_path(t_data *data, char *cmd);
 char	*is_absolute_path(t_data *data, char *cmd);
 char	*test_cmd_paths(t_data *data, char *cmd);
-int		cmd_found(t_data *data, char *path);
 int		file_access(t_data *data, char *final_path);
+int		is_directory(char *cmd);
 
 void	child_one(t_data *data, char *path, char **cmd, char **envp);
 void	child_two(t_data *data, char *path, char **cmd, char **envp);
@@ -65,12 +65,14 @@ void	fork_children(t_data *data, char **envp);
 
 void	in_quote(const char *str, t_parse *data);
 int		count_arguments(t_parse *data, const char *str);
-void	handle_backslash(const char **str, char *buffer, int *i, t_parse *data);
-void	handle_quotes(const char **str, t_parse *data);
+void	handle_backslash(const char **str, char *buffer, int *i);
+void	handle_quotes(const char **str, char *buffer, int *i);
 
 void	close_fds(t_data *data);
 void	ft_error_msg(t_data *data, char *arg, char *msg, int code);
 void	clear_memory(t_data *data);
 void	ft_sys_error(t_data *data, char *msg);
+void	unset_path_msg(t_data *data);
+void	cmd_not_found_msg(t_data *data);
 
 #endif
