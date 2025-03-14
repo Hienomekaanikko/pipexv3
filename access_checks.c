@@ -91,7 +91,9 @@ int	is_directory(char *cmd)
 		return (0);
 	fd = open(cmd, O_RDONLY | O_DIRECTORY);
 	if (fd != -1)
+	{
+		close(fd);
 		return (1);
-	close(fd);
+	}
 	return (0);
 }
