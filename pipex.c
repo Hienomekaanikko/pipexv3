@@ -81,6 +81,6 @@ int main(int argc, char **argv, char **envp)
 		status = processor(&data, data.pid2);
 	clear_memory(&data);
 	if (status == 1)
-		return (0);
+		return (1);
 	return (data.out_error);
 }
