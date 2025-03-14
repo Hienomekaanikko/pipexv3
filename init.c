@@ -12,13 +12,6 @@
 
 #include "pipex.h"
 
-void	init_parse_data(t_parse *data)
-{
-	data->count = 0;
-	data->in_quote = 0;
-	data->quote_char = '\0';
-}
-
 void	init_data(t_data *data)
 {
 	data->cmd1 = NULL;

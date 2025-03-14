@@ -39,15 +39,6 @@ typedef struct s_data
 	int		curr;
 }	t_data;
 
-typedef struct s_parse
-{
-	int			count;
-	int			in_quote;
-	char		quote_char;
-	char		*buffer;
-}	t_parse;
-
-void	init_parse_data(t_parse *data);
 void	init_data(t_data *data);
 
 char	**get_command(t_data *data, char *cmd);
