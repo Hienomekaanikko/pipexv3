@@ -12,17 +12,16 @@
 
 #include "pipex.h"
 
-static char *extract_argument(t_parse *data, const char **str)
+static char *extract_argument(const char **str)
 {
 	int		i;
 	char	*buffer;
 
 	i = 0;
-	init_parse_data(data);
 	buffer = malloc((ft_strlen(*str) + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	while (**str && (data->in_quote || !ft_isspace(**str)))
+	while (**str && !ft_isspace(**str))
 	{
 		if (**str == '"' || **str == '\'')
 			handle_quotes(str, buffer, &i);
@@ -37,14 +36,14 @@ static char *extract_argument(t_parse *data, const char **str)
 	return (buffer);
 }
 
-static int	fill_result(char **result, t_parse *data, const char **str)
+static int	fill_result(char **result, const char **str)
 {
 	int	i;
 
 	i = 0;
 	while (**str)
 	{
-		result[i] = extract_argument(data, str);
+		result[i] = extract_argument(str);
 		if (result[i] == NULL)
 		{
 			ft_free_split(result);
@@ -56,27 +55,26 @@ static int	fill_result(char **result, t_parse *data, const char **str)
 	return (1);
 }
 
-static char	**allocate_and_fill_result(t_parse *data, const char *str, int arg_count)
+static char	**allocate_and_fill_result(const char *str, int arg_count)
 {
 	char	**result;
 
 	result = malloc((arg_count + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
-	if (!fill_result(result, data, &str))
+	if (!fill_result(result, &str))
 		return (NULL);
 	return (result);
 }
 
 char	**parse_cmd(const char *str)
 {
-	t_parse	data;
 	int		arg_count;
 
 	if (!str)
 		return (NULL);
 	while (*str && ft_isspace(*str))
 		str++;
-	arg_count = count_arguments(&data, str);
-	return (allocate_and_fill_result(&data, str, arg_count));
+	arg_count = count_arguments(str);
+	return (allocate_and_fill_result(str, arg_count));
 }

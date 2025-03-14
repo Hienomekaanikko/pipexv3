@@ -63,8 +63,7 @@ void	child_one(t_data *data, char *path, char **cmd, char **envp);
 void	child_two(t_data *data, char *path, char **cmd, char **envp);
 void	fork_children(t_data *data, char **envp);
 
-void	in_quote(const char *str, t_parse *data);
-int		count_arguments(t_parse *data, const char *str);
+int		count_arguments(const char *str);
 void	handle_backslash(const char **str, char *buffer, int *i);
 void	handle_quotes(const char **str, char *buffer, int *i);
 

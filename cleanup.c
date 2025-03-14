@@ -16,16 +16,16 @@ void	close_fds(t_data *data)
 {
 	if (data->in != -1)
 		if (close(data->in) == -1)
-			ft_sys_error(data, "close");
+			ft_sys_error(data, "CLOSE");
 	if (data->out != -1)
 		if (close(data->out) == -1)
-			ft_sys_error(data, "close");
+			ft_sys_error(data, "CLOSE");
 	if (data->pipe[0] != -1)
 		if (close(data->pipe[0]) == -1)
-			ft_sys_error(data, "close");
+			ft_sys_error(data, "CLOSE");
 	if (data->pipe[1] != -1)
 		if (close(data->pipe[1]) == -1)
-			ft_sys_error(data, "close");
+			ft_sys_error(data, "CLOSE");
 }
 
 void	clear_memory(t_data *data)

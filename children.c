@@ -39,28 +39,32 @@ void	fork_children(t_data *data, char **envp)
 
 void	child_one(t_data *data, char *path, char **cmd, char **envp)
 {
-	dup2(data->in, 0);
-	close(data->in);
-	dup2(data->pipe[1], 1);
-	close(data->pipe[1]);
-	close(data->pipe[0]);
-	execve(path, cmd, envp);
-	close_fds(data);
-	clear_memory(data);
-	ft_putendl_fd("Excecve failed", 2);
-	exit(1);
+	if (dup2(data->in, 0) == -1)
+		ft_sys_error(data, "DUP2");
+	if (close(data->in) == -1)
+		ft_sys_error(data, "CLOSE");
+	if (dup2(data->pipe[1], 1) == -1)
+		ft_sys_error(data, "DUP2");
+	if (close(data->pipe[1]) == -1)
+		ft_sys_error(data, "CLOSE");
+	if (close(data->pipe[0]) == -1)
+		ft_sys_error(data, "CLOSE");
+	if (execve(path, cmd, envp) == -1)
+		ft_sys_error(data, "EXECVE");
 }
 
 void	child_two(t_data *data, char *path, char **cmd, char **envp)
 {
-	dup2(data->out, 1);
-	close(data->out);
-	dup2(data->pipe[0], 0);
-	close(data->pipe[0]);
-	close(data->pipe[1]);
-	execve(path, cmd, envp);
-	close_fds(data);
-	clear_memory(data);
-	ft_putendl_fd("Excecve failed", 2);
-	exit(1);
+	if (dup2(data->out, 1) == -1)
+		ft_sys_error(data, "DUP2");
+	if (close(data->out) == -1)
+		ft_sys_error(data, "CLOSE");
+	if (dup2(data->pipe[0], 0) == -1)
+		ft_sys_error(data, "DUP2");
+	if (close(data->pipe[0]) == -1)
+		ft_sys_error(data, "CLOSE");
+	if (close(data->pipe[1]) == -1)
+		ft_sys_error(data, "CLOSE");
+	if (execve(path, cmd, envp) == -1)
+		ft_sys_error(data, "EXECVE");
 }

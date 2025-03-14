@@ -1,41 +1,34 @@
 #include "pipex.h"
 
-void	in_quote(const char *str, t_parse *data)
+static void skip_quoted_string(const char **str)
 {
-	if (!data->in_quote)
-	{
-		data->in_quote = 1;
-		data->quote_char = *str;
-	}
-	else if (*str == data->quote_char)
-	{
-		data->in_quote = 0;
-		data->quote_char = '\0';
-	}
+	char quote;
+
+	quote = **str;
+	(*str)++;
+	while (**str && **str != quote)
+		(*str)++;
+	if (**str == quote)
+		(*str)++;
 }
 
-int count_arguments(t_parse *data, const char *str)
-{
-	char	quote;
 
-	init_parse_data(data);
+int count_arguments(const char *str)
+{
+	int		count;
+
+	count = 0;
 	while (*str)
 	{
 		if (ft_isspace(*str))
 			str++;
 		else
 		{
-			data->count++;
+			count++;
 			while (*str && !ft_isspace(*str))
 			{
 				if (*str == '"' || *str == '\'')
-				{
-					quote = *str++;
-					while (*str && *str != quote)
-						str++;
-					if (*str == quote)
-						str++;
-				}
+					skip_quoted_string(&str);
 				else if (*str == '\\' && *(str + 1))
 					str += 2;
 				else
@@ -43,7 +36,7 @@ int count_arguments(t_parse *data, const char *str)
 			}
 		}
 	}
-	return (data->count);
+	return (count);
 }
 
 void handle_quotes(const char **str, char *buffer, int *i)
