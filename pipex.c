@@ -84,5 +84,6 @@ int main(int argc, char **argv, char **envp)
 	prep_env(&data, argc, argv);
 	get_arguments(&data, argv, envp);
 	fork_children(&data, envp);
+	clear_memory(&data);
 	return (processor(&data, data.pid2));
 }
