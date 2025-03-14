@@ -35,16 +35,27 @@ static void	prep_env(t_data *data, int argc, char **argv)
 		ft_error_msg(data, argv[argc - 1], "No such file or directory", 127);
 }
 
-static int	processor(t_data *data, pid_t pid)
+static int	processor(t_data *data, pid_t pid2)
 {
-	int	status;
+	int		processes;
+	int		status;
+	int		exit_code;
+	pid_t	pid;
 
-	if (waitpid(pid, &status, 0) == -1)
-		ft_sys_error(data, NULL);
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+	processes = 2;
+	status = -1;
+	exit_code = 0;
+	while (processes > 0)
+	{
+		pid = wait(&status);
+		if (pid == pid2 && WIFEXITED(status)
+			&& WEXITSTATUS(status) == 1)
+			exit_code = 1;
+		processes--;
+	}
+	if (exit_code)
 		return (1);
-	else
-		return (0);
+	return (data->out_error);
 }
 
 static void get_arguments(t_data *data, char **argv, char **envp)
@@ -63,9 +74,7 @@ static void get_arguments(t_data *data, char **argv, char **envp)
 int main(int argc, char **argv, char **envp)
 {
 	t_data		data;
-	int			status;
 
-	status = 0;
 	init_data(&data);
 	if (argc != 5)
 	{
@@ -75,12 +84,5 @@ int main(int argc, char **argv, char **envp)
 	prep_env(&data, argc, argv);
 	get_arguments(&data, argv, envp);
 	fork_children(&data, envp);
-	if (data.in_error == 0)
-		status = processor(&data, data.pid1);
-	if (data.out_error == 0)
-		status = processor(&data, data.pid2);
-	clear_memory(&data);
-	if (status == 1)
-		return (1);
-	return (data.out_error);
+	return (processor(&data, data.pid2));
 }

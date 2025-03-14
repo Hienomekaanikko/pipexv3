@@ -72,8 +72,6 @@ char	**parse_cmd(const char *str)
 	t_parse	data;
 	int		arg_count;
 
-	if (!str)
-		return (NULL);
 	while (*str && ft_isspace(*str))
 		str++;
 	arg_count = count_arguments(&data, str);
