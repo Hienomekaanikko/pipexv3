@@ -48,14 +48,14 @@ char	*is_relative_path(t_data *data, char *cmd)
 		{
 			if (access(cmd, X_OK) == 0)
 			{
-				result = ft_strdup(cmd);
-				if (!result)
-					ft_sys_error(data, "Memory allocation failed");
 				if (is_directory(cmd))
 				{
 					ft_error_msg(data, cmd, "Is a directory", 126);
 					return (NULL);
 				}
+				result = ft_strdup(cmd);
+				if (!result)
+					ft_sys_error(data, "Memory allocation failed");
 				return (result);
 			}
 			ft_putstr_fd("pipex/", 2);
