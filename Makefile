@@ -5,7 +5,7 @@ LIBS	= ${LIBFT}/libft.a
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 
-SRC = pipex.c children.c cleanup.c get_path.c parse_cmd.c init.c access_checks.c parse_utils.c messages.c
+SRC = pipex.c children.c cleanup.c get_path.c parse_cmd.c init.c access_checks.c parse_utils.c error_utils.c
 OBJS = $(SRC:.c=.o)
 
 all: $(NAME)

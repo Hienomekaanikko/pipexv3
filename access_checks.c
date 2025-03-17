@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-char *is_absolute_path(t_data *data, char *cmd)
+char	*is_absolute_path(t_data *data, char *cmd)
 {
 	char	*result;
 
@@ -36,9 +36,9 @@ char *is_absolute_path(t_data *data, char *cmd)
 	return (NULL);
 }
 
-char *is_relative_path(t_data *data, char *cmd)
+char	*is_relative_path(t_data *data, char *cmd)
 {
-	char *result;
+	char	*result;
 
 	result = NULL;
 	if ((ft_strncmp("./", cmd, 2) == 0) || (ft_strncmp("../", cmd, 3) == 0) ||

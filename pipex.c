@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-static void	prep_env(t_data *data, int argc, char **argv)
+static void	prep_files(t_data *data, int argc, char **argv)
 {
 	data->in = open(argv[1], O_RDONLY);
 	if (data->in == -1 && !access(argv[1], F_OK))
@@ -90,7 +90,7 @@ int main(int argc, char **argv, char **envp)
 		ft_putendl_fd("Usage: ./pipex infile cmd1 cmd2 outfile", 2);
 		exit(1);
 	}
-	prep_env(&data, argc, argv);
+	prep_files(&data, argc, argv);
 	get_arguments(&data, argv, envp);
 	fork_children(&data, envp);
 	clear_memory(&data);

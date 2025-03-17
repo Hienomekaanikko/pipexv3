@@ -1,8 +1,8 @@
 #include "pipex.h"
 
-static void skip_quoted_string(const char **str)
+static void	skip_quoted_string(const char **str)
 {
-	char quote;
+	char	quote;
 
 	quote = **str;
 	(*str)++;
@@ -13,9 +13,9 @@ static void skip_quoted_string(const char **str)
 }
 
 
-int count_arguments(const char *str)
+int	count_arguments(const char *str)
 {
-	int		count;
+	int	count;
 
 	count = 0;
 	while (*str)
@@ -39,9 +39,9 @@ int count_arguments(const char *str)
 	return (count);
 }
 
-void handle_quotes(const char **str, char *buffer, int *i)
+void	handle_quotes(const char **str, char *buffer, int *i)
 {
-	char quote;
+	char	quote;
 
 	quote = **str;
 	(*str)++;

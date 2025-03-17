@@ -64,5 +64,6 @@ void	clear_memory(t_data *data);
 void	ft_sys_error(t_data *data, char *msg);
 void	unset_path_msg(t_data *data);
 void	cmd_not_found_msg(t_data *data);
+int		is_error(t_data *data);
 
 #endif

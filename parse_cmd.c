@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-static char *extract_argument(const char **str)
+static char	*extract_argument(const char **str)
 {
 	int		i;
 	char	*buffer;

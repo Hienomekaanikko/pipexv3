@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-char *test_cmd_paths(t_data *data, char *cmd)
+char	*test_cmd_paths(t_data *data, char *cmd)
 {
 	char	*final_path;
 	int		i;
@@ -87,16 +87,10 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 
 	final_path = NULL;
 	final_path = is_relative_path(data, cmd[0]);
-	if ((data->curr == 1 && data->in_error == 126)
-		|| (data->curr == 2 && data->out_error == 126))
-		return (NULL);
-	if (!final_path)
+	if (!final_path && !is_error(data))
 	{
 		final_path = is_absolute_path(data, cmd[0]);
-		if ((data->curr == 1 && data->in_error == 1)
-			|| (data->curr == 2 && data->out_error == 127))
-			return (NULL);
-		if (!final_path)
+		if (!final_path && !is_error(data))
 		{
 			if (get_directories(data, envp))
 			{
@@ -107,6 +101,8 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 				return (NULL);
 		}
 	}
+	if (is_error(data))
+		return (NULL);
 	if (file_access(data, final_path))
 		return (final_path);
 	else
