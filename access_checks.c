@@ -21,16 +21,12 @@ char	*is_absolute_path(t_data *data, char *cmd)
 	{
 		if (access(cmd, F_OK) != 0)
 		{
-			ft_error_msg(data, cmd, "No such file or directory", 127);
-			if (data->curr == 1)
-				data->in_error = 1;
-			if (data->curr == 2)
-				data->out_error = 127;
+			ft_error_msg(data, cmd, "no such file or directory", 127);
 			return (NULL);
 		}
 		result = ft_strdup(cmd);
 		if (!result)
-			ft_mem_error(data, "Memory allocation failed");
+			ft_mem_error(data, "memory allocation failed");
 		return (result);
 	}
 	return (NULL);
@@ -48,13 +44,17 @@ char	*is_relative_path(t_data *data, char *cmd)
 		{
 			if (access(cmd, X_OK) == 0)
 			{
+				if (is_directory(cmd))
+				{
+					ft_error_msg(data, cmd, "is a directory", 126);
+					return (NULL);
+				}
 				result = ft_strdup(cmd);
 				if (!result)
-					ft_mem_error(data, "Memory allocation failed");
+					ft_mem_error(data, "memory allocation failed");
 				return (result);
 			}
-			ft_putstr_fd("pipex/", 2);
-			ft_error_msg(data, cmd, "Permission denied", 126);
+			ft_error_msg(data, cmd, "permission denied", 126);
 		}
 	}
 	return (NULL);
@@ -66,11 +66,28 @@ int	file_access(t_data *data, char *final_path)
 		return (0);
 	if (access(final_path, F_OK) == 0)
 	{
+		if (is_directory(final_path))
+			ft_error_msg(data, final_path, "command not found", 127);
 		if (access(final_path, X_OK) != 0)
 		{
-			ft_error_msg(data, final_path, "Permission denied", 126);
+			ft_error_msg(data, final_path, "permission denied", 126);
 			return (0);
 		}
+		return (1);
+	}
+	return (0);
+}
+
+int	is_directory(char *cmd)
+{
+	int	fd;
+
+	if (!cmd)
+		return (0);
+	fd = open(cmd, O_DIRECTORY);
+	if (fd != -1)
+	{
+		close(fd);
 		return (1);
 	}
 	return (0);

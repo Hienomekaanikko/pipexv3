@@ -15,17 +15,17 @@
 void	cmd_not_found_msg(t_data *data)
 {
 	if (data->curr == 1 && data->in_error == 0)
-		ft_error_msg(data, data->cmd1[0], "Command not found", 127);
+		ft_error_msg(data, data->cmd1[0], "command not found", 127);
 	else if (data->curr == 2 && data->out_error == 0)
-		ft_error_msg(data, data->cmd2[0], "Command not found", 127);
+		ft_error_msg(data, data->cmd2[0], "command not found", 127);
 }
 
 void	unset_path_msg(t_data *data)
 {
 	if (data->curr == 1 && data->in_error == 0)
-		ft_error_msg(data, data->cmd1[0], "No such file or directory", 127);
+		ft_error_msg(data, data->cmd1[0], "no such file or directory", 127);
 	else if (data->curr == 2 && data->out_error == 0)
-		ft_error_msg(data, data->cmd2[0], "No such file or directory", 127);
+		ft_error_msg(data, data->cmd2[0], "no such file or directory", 127);
 }
 
 int	is_error(t_data *data)
@@ -42,11 +42,11 @@ void	ft_error_msg(t_data *data, char *arg, char *msg, int code)
 		data->in_error = code;
 	if (data->curr == 2 && !data->out_error)
 		data->out_error = code;
+	ft_putstr_fd(msg, 2);
 	if (arg)
 	{
-		ft_putstr_fd(arg, 2);
 		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(arg, 2);
 	}
-	ft_putstr_fd(msg, 2);
 	ft_putstr_fd("\n", 2);
 }
