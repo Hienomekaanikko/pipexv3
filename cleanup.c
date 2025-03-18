@@ -6,7 +6,7 @@
 /*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:23:44 by msuokas           #+#    #+#             */
-/*   Updated: 2025/03/12 17:53:22 by msuokas          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:28:56 by msuokas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,18 @@ void	clear_memory(t_data *data)
 		free(data->path2);
 }
 
-void	ft_error_msg(t_data *data, char *arg, char *msg, int code)
-{
-	if (data->curr == 1 && !data->in_error)
-		data->in_error = code;
-	if (data->curr == 2 && !data->out_error)
-		data->out_error = code;
-	if (arg)
-	{
-		ft_putstr_fd(" ", 2);
-		ft_putstr_fd(arg, 2);
-	}
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-}
-
 void	ft_sys_error(t_data *data, char *msg)
 {
 	close_fds(data);
 	clear_memory(data);
-	if (errno && msg)
-		perror(msg);
-	else if (msg && !errno)
-		ft_putendl_fd(msg, 2);
+	perror(msg);
+	exit(1);
+}
+
+void	ft_mem_error(t_data *data, char *msg)
+{
+	close_fds(data);
+	clear_memory(data);
+	ft_putendl_fd(msg, 2);
 	exit(1);
 }

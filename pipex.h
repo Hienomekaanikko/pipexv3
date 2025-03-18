@@ -6,7 +6,7 @@
 /*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:28:37 by msuokas           #+#    #+#             */
-/*   Updated: 2025/03/12 17:44:26 by msuokas          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:29:04 by msuokas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,8 @@
 # include "libft/libft.h"
 # include <unistd.h>
 # include <fcntl.h>
-# include <sys/types.h>
-# include <string.h>
 # include <sys/wait.h>
 # include <stdio.h>
-# include <errno.h>
 
 typedef struct s_data
 {
@@ -48,7 +45,6 @@ char	*is_relative_path(t_data *data, char *cmd);
 char	*is_absolute_path(t_data *data, char *cmd);
 char	*test_cmd_paths(t_data *data, char *cmd);
 int		file_access(t_data *data, char *final_path);
-int		is_directory(char *cmd);
 
 void	child_one(t_data *data, char *path, char **cmd, char **envp);
 void	child_two(t_data *data, char *path, char **cmd, char **envp);
@@ -65,5 +61,6 @@ void	ft_sys_error(t_data *data, char *msg);
 void	unset_path_msg(t_data *data);
 void	cmd_not_found_msg(t_data *data);
 int		is_error(t_data *data);
+void	ft_mem_error(t_data *data, char *msg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 11:27:06 by msuokas           #+#    #+#             */
-/*   Updated: 2025/03/12 11:28:56 by msuokas          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:27:44 by msuokas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,5 @@ char		*ft_strndup(const char *s, size_t n);
 void		ft_free_substrings(char **arr_str);
 char		*ft_strjoin_free(char *s1, char *s2);
 int			is_space(char *cmd);
-
 
 #endif

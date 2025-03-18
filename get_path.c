@@ -6,7 +6,7 @@
 /*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 18:02:48 by msuokas           #+#    #+#             */
-/*   Updated: 2025/03/12 18:03:16 by msuokas          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:30:46 by msuokas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ char	*test_cmd_paths(t_data *data, char *cmd)
 	{
 		final_path = ft_strjoin(data->paths[i], "/");
 		if (!final_path)
-			ft_sys_error(data, "Memory allocation failed");
+			ft_mem_error(data, "Memory allocation failed");
 		final_path = ft_strjoin_free(final_path, cmd);
 		if (!final_path)
-			ft_sys_error(data, "Memory allocation failed");
+			ft_mem_error(data, "Memory allocation failed");
 		if (file_access(data, final_path))
 		{
 			ft_free_split(data->paths);
@@ -62,28 +62,28 @@ static int	get_directories(t_data *data, char **envp)
 	}
 	data->paths = ft_split(envp[i] + 5, ':');
 	if (!data->paths)
-		ft_sys_error(data, "Memory allocation failed");
+		ft_mem_error(data, "Memory allocation failed");
 	return (1);
 }
 
 char	**get_command(t_data *data, char *cmd)
 {
-	char **temp;
+	char	**temp;
 
 	if (!cmd || (ft_strlen(cmd) == 0) || is_space(cmd))
 	{
-		ft_error_msg(data, NULL, "command not found", 127);
+		ft_error_msg(data, NULL, "Command not found", 127);
 		return (NULL);
 	}
 	temp = parse_cmd(cmd);
 	if (!temp)
-		ft_sys_error(data, "Memory allocation failed");
+		ft_mem_error(data, "Memory allocation failed");
 	return (temp);
 }
 
 char	*get_command_path(t_data *data, char **cmd, char **envp)
 {
-	char *final_path;
+	char	*final_path;
 
 	final_path = NULL;
 	final_path = is_relative_path(data, cmd[0]);
@@ -97,8 +97,6 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 				final_path = test_cmd_paths(data, cmd[0]);
 				return (final_path);
 			}
-			else
-				return (NULL);
 		}
 	}
 	if (is_error(data))
@@ -106,6 +104,6 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 	if (file_access(data, final_path))
 		return (final_path);
 	else
-		ft_error_msg(data, *cmd, "command not found", 127);
+		ft_error_msg(data, *cmd, "Command not found", 127);
 	return (final_path);
 }

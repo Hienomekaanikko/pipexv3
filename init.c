@@ -6,7 +6,7 @@
 /*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:02:27 by msuokas           #+#    #+#             */
-/*   Updated: 2025/03/12 17:44:56 by msuokas          ###   ########.fr       */
+/*   Updated: 2025/03/18 09:50:45 by msuokas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	init_data(t_data *data)
 	data->pipe[0] = -1;
 	data->pipe[1] = -1;
 	data->out_error = 0;
+	data->pid1 = -1;
+	data->pid2 = -1;
 	data->in_error = 0;
 	data->curr = 1;
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/18 11:40:52 by msuokas           #+#    #+#             */
+/*   Updated: 2025/03/18 13:08:50 by msuokas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 static void	skip_quoted_string(const char **str)
@@ -11,7 +23,6 @@ static void	skip_quoted_string(const char **str)
 	if (**str == quote)
 		(*str)++;
 }
-
 
 int	count_arguments(const char *str)
 {

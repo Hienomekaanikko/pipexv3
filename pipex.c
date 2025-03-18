@@ -6,7 +6,7 @@
 /*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 17:42:49 by msuokas           #+#    #+#             */
-/*   Updated: 2025/03/12 18:01:44 by msuokas          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:29:27 by msuokas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	processor(t_data *data, pid_t pid2)
 	processes = 2;
 	status = -1;
 	exit_code = 0;
+	pid = -1;
 	while (processes > 0)
 	{
 		pid = wait(&status);
@@ -61,7 +62,7 @@ static int	processor(t_data *data, pid_t pid2)
 	return (data->out_error);
 }
 
-static void get_arguments(t_data *data, char **argv, char **envp)
+static void	get_arguments(t_data *data, char **argv, char **envp)
 {
 	if (data->in_error == 0)
 	{
@@ -80,7 +81,7 @@ static void get_arguments(t_data *data, char **argv, char **envp)
 		ft_sys_error(data, "PIPE");
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_data		data;
 
@@ -88,7 +89,7 @@ int main(int argc, char **argv, char **envp)
 	if (argc != 5)
 	{
 		ft_putendl_fd("Usage: ./pipex infile cmd1 cmd2 outfile", 2);
-		exit(1);
+		return (0);
 	}
 	prep_files(&data, argc, argv);
 	get_arguments(&data, argv, envp);
