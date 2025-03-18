@@ -21,12 +21,12 @@ char	*is_absolute_path(t_data *data, char *cmd)
 	{
 		if (access(cmd, F_OK) != 0)
 		{
-			ft_error_msg(data, cmd, "no such file or directory", 127);
+			ft_error_msg(data, cmd, "No such file or directory", 127);
 			return (NULL);
 		}
 		result = ft_strdup(cmd);
 		if (!result)
-			ft_mem_error(data, "memory allocation failed");
+			ft_mem_error(data, "Memory allocation failed");
 		return (result);
 	}
 	return (NULL);
@@ -51,10 +51,10 @@ char	*is_relative_path(t_data *data, char *cmd)
 				}
 				result = ft_strdup(cmd);
 				if (!result)
-					ft_mem_error(data, "memory allocation failed");
+					ft_mem_error(data, "Memory allocation failed");
 				return (result);
 			}
-			ft_error_msg(data, cmd, "permission denied", 126);
+			ft_error_msg(data, cmd, "Permission denied", 126);
 		}
 	}
 	return (NULL);
@@ -70,7 +70,7 @@ int	file_access(t_data *data, char *final_path)
 			ft_error_msg(data, final_path, "command not found", 127);
 		if (access(final_path, X_OK) != 0)
 		{
-			ft_error_msg(data, final_path, "permission denied", 126);
+			ft_error_msg(data, final_path, "Permission denied", 126);
 			return (0);
 		}
 		return (1);

@@ -23,10 +23,10 @@ char	*test_cmd_paths(t_data *data, char *cmd)
 	{
 		final_path = ft_strjoin(data->paths[i], "/");
 		if (!final_path)
-			ft_mem_error(data, "memory allocation failed");
+			ft_mem_error(data, "Memory allocation failed");
 		final_path = ft_strjoin_free(final_path, cmd);
 		if (!final_path)
-			ft_mem_error(data, "memory allocation failed");
+			ft_mem_error(data, "Memory allocation failed");
 		if (file_access(data, final_path))
 		{
 			ft_free_split(data->paths);
@@ -62,7 +62,7 @@ static int	get_directories(t_data *data, char **envp)
 	}
 	data->paths = ft_split(envp[i] + 5, ':');
 	if (!data->paths)
-		ft_mem_error(data, "memory allocation failed");
+		ft_mem_error(data, "Memory allocation failed");
 	return (1);
 }
 
@@ -77,7 +77,7 @@ char	**get_command(t_data *data, char *cmd)
 	}
 	temp = parse_cmd(cmd);
 	if (!temp)
-		ft_mem_error(data, "memory allocation failed");
+		ft_mem_error(data, "Memory allocation failed");
 	return (temp);
 }
 
@@ -97,13 +97,10 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 				final_path = test_cmd_paths(data, cmd[0]);
 				return (final_path);
 			}
+			return (NULL);
 		}
 	}
 	if (is_error(data))
 		return (NULL);
-	if (file_access(data, final_path))
-		return (final_path);
-	else
-		ft_error_msg(data, *cmd, "command not found", 127);
 	return (final_path);
 }

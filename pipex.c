@@ -89,7 +89,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 5)
 	{
 		ft_putendl_fd("Usage: ./pipex infile cmd1 cmd2 outfile", 2);
-		return (0);
+		return (1);
 	}
 	prep_files(&data, argc, argv);
 	get_arguments(&data, argv, envp);
