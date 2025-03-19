@@ -19,15 +19,24 @@ char	*is_absolute_path(t_data *data, char *cmd)
 	result = NULL;
 	if (cmd[0] == '/')
 	{
-		if (access(cmd, F_OK) != 0)
+		if (access(cmd, F_OK) == 0)
 		{
-			ft_error_msg(data, cmd, "No such file or directory", 127);
-			return (NULL);
+			if (is_directory(cmd))
+			{
+				ft_error_msg(data, cmd, "is a directory", 126);
+				return (NULL);
+			}
+			if (access (cmd, X_OK) == 0)
+			{
+				result = ft_strdup(cmd);
+				if (!result)
+					ft_mem_error(data, "Memory allocation failed");
+				return (result);
+			}
+			else
+				ft_error_msg(data, cmd, "Permission denied", 126);
 		}
-		result = ft_strdup(cmd);
-		if (!result)
-			ft_mem_error(data, "Memory allocation failed");
-		return (result);
+		ft_error_msg(data, cmd, "No such file or directory", 127);
 	}
 	return (NULL);
 }
@@ -42,13 +51,13 @@ char	*is_relative_path(t_data *data, char *cmd)
 	{
 		if (access(cmd, F_OK) == 0)
 		{
+			if (is_directory(cmd))
+			{
+				ft_error_msg(data, cmd, "is a directory", 126);
+				return (NULL);
+			}
 			if (access(cmd, X_OK) == 0)
 			{
-				if (is_directory(cmd))
-				{
-					ft_error_msg(data, cmd, "is a directory", 126);
-					return (NULL);
-				}
 				result = ft_strdup(cmd);
 				if (!result)
 					ft_mem_error(data, "Memory allocation failed");
@@ -56,21 +65,22 @@ char	*is_relative_path(t_data *data, char *cmd)
 			}
 			ft_error_msg(data, cmd, "Permission denied", 126);
 		}
+		ft_error_msg(data, cmd, "No such file or directory", 127);
 	}
 	return (NULL);
 }
 
-int	file_access(t_data *data, char *final_path)
+int	file_access(t_data *data, char *path)
 {
-	if (!final_path)
+	if (!path)
 		return (0);
-	if (access(final_path, F_OK) == 0)
+	if (access(path, F_OK) == 0)
 	{
-		if (is_directory(final_path))
-			ft_error_msg(data, final_path, "command not found", 127);
-		if (access(final_path, X_OK) != 0)
+		if (is_directory(path))
+			ft_error_msg(data, path, "is a directory", 127);
+		if (access(path, X_OK) != 0)
 		{
-			ft_error_msg(data, final_path, "Permission denied", 126);
+			ft_error_msg(data, path, "Permission denied", 126);
 			return (0);
 		}
 		return (1);

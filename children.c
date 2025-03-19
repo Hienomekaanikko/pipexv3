@@ -14,6 +14,8 @@
 
 void	fork_children(t_data *data, char **envp)
 {
+	if (pipe(data->pipe) < 0)
+		ft_sys_error(data, "PIPE");
 	if (!data->in_error)
 	{
 		data->pid1 = fork();

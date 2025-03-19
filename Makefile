@@ -10,14 +10,14 @@ OBJS = $(SRC:.c=.o)
 
 all: $(NAME)
 
+$(NAME): $(OBJS) $(LIBS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+
 $(LIBS):
 	$(MAKE) -C $(LIBFT)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
-
-$(NAME): $(OBJS) $(LIBS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)

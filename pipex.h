@@ -45,7 +45,7 @@ char	*is_relative_path(t_data *data, char *cmd);
 char	*is_absolute_path(t_data *data, char *cmd);
 char	*test_cmd_paths(t_data *data, char *cmd);
 int		is_directory(char *cmd);
-int		file_access(t_data *data, char *final_path);
+int		file_access(t_data *data, char *path);
 
 void	child_one(t_data *data, char *path, char **cmd, char **envp);
 void	child_two(t_data *data, char *path, char **cmd, char **envp);

@@ -45,21 +45,13 @@ static int	get_directories(t_data *data, char **envp)
 {
 	int	i;
 
-	if (data->paths != NULL)
-		return (1);
 	i = 0;
 	if (!envp[0])
-	{
-		unset_path_msg(data);
 		return (0);
-	}
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
-	{
-		unset_path_msg(data);
 		return (0);
-	}
 	data->paths = ft_split(envp[i] + 5, ':');
 	if (!data->paths)
 		ft_mem_error(data, "Memory allocation failed");
@@ -97,7 +89,8 @@ char	*get_command_path(t_data *data, char **cmd, char **envp)
 				final_path = test_cmd_paths(data, cmd[0]);
 				return (final_path);
 			}
-			return (NULL);
+			else
+				unset_path_msg(data);
 		}
 	}
 	if (is_error(data))

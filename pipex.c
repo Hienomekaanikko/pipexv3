@@ -77,8 +77,7 @@ static void	get_arguments(t_data *data, char **argv, char **envp)
 		if (data->cmd2)
 			data->path2 = get_command_path(data, data->cmd2, envp);
 	}
-	if (pipe(data->pipe) < 0)
-		ft_sys_error(data, "PIPE");
+
 }
 
 int	main(int argc, char **argv, char **envp)
